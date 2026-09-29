@@ -1,0 +1,70 @@
+name: Unpack ZIP and overwrite repo
+
+on:
+  workflow_dispatch:
+    inputs:
+      zip_file:
+        description: "ZIP file name in repo root"
+        required: true
+        default: "linjian-peek-public-v0.3.4.2-address-fix.zip"
+      commit_message:
+        description: "Commit message"
+        required: true
+        default: "Update v0.3.4.2 address fix"
+
+permissions:
+  contents: write
+
+jobs:
+  unpack:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Unzip and overwrite
+        run: |
+          ZIP_FILE="${{ github.event.inputs.zip_file }}"
+
+          if [ ! -f "$ZIP_FILE" ]; then
+            echo "ZIP not found: $ZIP_FILE"
+            ls -la
+            exit 1
+          fi
+
+          rm -rf /tmp/unpack-zip
+          mkdir -p /tmp/unpack-zip
+          unzip -q "$ZIP_FILE" -d /tmp/unpack-zip
+
+          CONTENT_DIR="/tmp/unpack-zip"
+          ITEM_COUNT=$(find /tmp/unpack-zip -mindepth 1 -maxdepth 1 | wc -l)
+
+          if [ "$ITEM_COUNT" = "1" ]; then
+            ONLY_ITEM=$(find /tmp/unpack-zip -mindepth 1 -maxdepth 1 | head -n 1)
+            if [ -d "$ONLY_ITEM" ]; then
+              CONTENT_DIR="$ONLY_ITEM"
+            fi
+          fi
+
+          rsync -a --delete \
+            --exclude ".git" \
+            --exclude ".github/workflows/unpack-zip-overwrite.yml" \
+            "$CONTENT_DIR"/ ./
+
+          rm -f "$ZIP_FILE"
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+
+          git commit -m "${{ github.event.inputs.commit_message }}"
+          git push

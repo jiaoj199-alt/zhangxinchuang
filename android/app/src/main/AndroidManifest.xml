@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="dev.linjian.peek"
+    android:versionCode="30900"
+    android:versionName="0.3.9.0">
+
+    <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="34" />
+
+    <supports-screens
+        android:anyDensity="true"
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"
+        android:resizeable="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+
+    <queries>
+        <package android:name="com.xingin.xhs" />
+        <package android:name="com.tencent.mm" />
+        <package android:name="com.tencent.mobileqq" />
+        <package android:name="com.ss.android.ugc.aweme" />
+        <package android:name="com.sina.weibo" />
+        <package android:name="com.twitter.android" />
+        <package android:name="com.sankuai.meituan" />
+        <package android:name="me.ele" />
+        <package android:name="com.jingdong.app.mall" />
+        <intent>
+            <action android:name="android.intent.action.SET_ALARM" />
+        </intent>
+    </queries>
+
+    <application
+        android:label="掌心窗"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+        android:usesCleartextTraffic="true"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:supportsRtl="true"
+        android:hardwareAccelerated="true"
+        android:resizeableActivity="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:resizeableActivity="true"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize|density|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".WalletActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name=".TakeoutActivity"
+            android:exported="false"
+            android:resizeableActivity="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name=".FocusLockActivity"
+            android:exported="false"
+            android:resizeableActivity="true"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTop"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name=".LockActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name=".ReminderActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
+        <activity
+            android:name=".GuidianActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+
+        <service
+            android:name=".CompanionService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service
+            android:name=".ScreenshotService"
+            android:label="@string/accessibility_name"
+            android:exported="true"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_config" />
+        </service>
+
+
+        <service
+            android:name=".MediaNotificationService"
+            android:label="掌心窗媒体状态"
+            android:exported="true"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>

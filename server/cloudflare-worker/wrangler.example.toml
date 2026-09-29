@@ -1,0 +1,17 @@
+name = "linjian-peek-cloudflare"
+main = "worker.js"
+compatibility_date = "2026-08-22"
+
+# 部署前：wrangler secret put LINJIAN_TOKEN
+# 表情包库：wrangler secret put SUPABASE_URL
+# 表情包库：wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+# 可选：wrangler secret put SUPABASE_STICKER_BUCKET（默认 stickers）
+# 然后填入你自己创建的 D1/KV 绑定。
+[[d1_databases]]
+binding = "DB"
+database_name = "linjian-peek"
+database_id = "replace-with-your-d1-database-id"
+
+[[kv_namespaces]]
+binding = "SCREENSHOT_KV"
+id = "replace-with-your-kv-namespace-id"

@@ -1,0 +1,71 @@
+name: Apply v0.3.4.5 render-address-fix.zip
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Pull latest
+        run: |
+          git pull --ff-only origin main
+
+      - name: Apply ZIP
+        run: |
+          ZIP_FILE="linjian-peek-public-v0.3.4.5-render-address-fix.zip"
+
+          if [ ! -f "$ZIP_FILE" ]; then
+            echo "找不到 ZIP：$ZIP_FILE"
+            echo "当前仓库文件："
+            ls -la
+            exit 1
+          fi
+
+          rm -rf /tmp/peek-fix
+          mkdir -p /tmp/peek-fix
+          unzip -q "$ZIP_FILE" -d /tmp/peek-fix
+
+          CONTENT_DIR="/tmp/peek-fix"
+          ITEM_COUNT=$(find /tmp/peek-fix -mindepth 1 -maxdepth 1 | wc -l)
+
+          if [ "$ITEM_COUNT" = "1" ]; then
+            ONLY_ITEM=$(find /tmp/peek-fix -mindepth 1 -maxdepth 1 | head -n 1)
+            if [ -d "$ONLY_ITEM" ]; then
+              CONTENT_DIR="$ONLY_ITEM"
+            fi
+          fi
+
+          rsync -a --delete \
+            --exclude ".git" \
+            --exclude ".github" \
+            "$CONTENT_DIR"/ ./
+
+          rm -f "$ZIP_FILE"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add -A
+
+          if git diff --cached --quiet; then
+            echo "没有变化，不需要提交。"
+            exit 0
+          fi
+
+          git commit -m "Update v0.3.4.2 address fix"
+
+          git pull --rebase origin main
+          git push origin main

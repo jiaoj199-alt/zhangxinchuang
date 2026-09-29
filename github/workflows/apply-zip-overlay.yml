@@ -1,0 +1,87 @@
+name: Apply ZIP Overlay
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Apply uploaded ZIP
+        run: |
+          python3 <<'PY'
+          import os, zipfile, shutil, glob
+          from pathlib import Path
+
+          root = Path(".").resolve()
+          zips = sorted(root.glob("*.zip"), key=lambda p: p.stat().st_mtime, reverse=True)
+          if not zips:
+              raise SystemExit("No zip file found in repo root.")
+
+          zip_path = zips[0]
+          print("Using zip:", zip_path)
+
+          tmp = root / "_zip_overlay_tmp"
+          if tmp.exists():
+              shutil.rmtree(tmp)
+          tmp.mkdir()
+
+          with zipfile.ZipFile(zip_path, "r") as z:
+              z.extractall(tmp)
+
+          entries = [p for p in tmp.iterdir() if p.name not in [".DS_Store", "__MACOSX"]]
+          if len(entries) == 1 and entries[0].is_dir():
+              src = entries[0]
+          else:
+              src = tmp
+
+          allowed_names = [
+              "android",
+              "server",
+              "mcp",
+              "docs",
+              "README.md",
+              "LICENSE",
+              "render.yaml",
+              "requirements.txt",
+              "package.json",
+              "package-lock.json",
+              "build.sh",
+              "start.sh"
+          ]
+
+          for name in allowed_names:
+              item = src / name
+              if not item.exists():
+                  continue
+              dest = root / name
+              if dest.exists():
+                  if dest.is_dir():
+                      shutil.rmtree(dest)
+                  else:
+                      dest.unlink()
+              if item.is_dir():
+                  shutil.copytree(item, dest)
+              else:
+                  shutil.copy2(item, dest)
+              print("Copied:", name)
+
+          shutil.rmtree(tmp)
+          zip_path.unlink()
+          print("Overlay applied and zip removed.")
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Apply public v0.3.4 clean overlay" || echo "No changes to commit"
+          git push

@@ -1,0 +1,28 @@
+{
+  "latest_version_name": "0.3.9.0",
+  "latest_version_code": 30900,
+  "apk_url": "https://github.com/linzhi-524/linjian-peek-public/releases/download/v0.3.9.0/Zhangxinchuang-public-v0.3.9.0.apk",
+  "sha256": "",
+  "required": false,
+  "notes": [
+    "修复部分 AI 平台连接 MCP 时因 experimental.ovoActivityCards 触发 Invalid input 的兼容问题。",
+    "修复日记批注读取工具返回 noop：server 白名单补齐 read/list/add/mark/delete annotation 相关 action。",
+    "保留上一版媒体状态修复：MediaSession 主动读取媒体播放状态，通知监听作为兜底。",
+    "版本号升级到 v0.3.9.0 / 30900，固定签名保持不变。",
+    "部署提示：MCP 服务与 server 服务都需要重新部署；手机 App 如需显示新版本号需重新打包安装。"
+  ],
+  "changelog": [
+    "修复部分 AI 平台连接 MCP 时因 experimental.ovoActivityCards 触发 Invalid input 的兼容问题。",
+    "修复日记批注读取工具返回 noop：server 白名单补齐 read/list/add/mark/delete annotation 相关 action。",
+    "保留上一版媒体状态修复：MediaSession 主动读取媒体播放状态，通知监听作为兜底。",
+    "版本号升级到 v0.3.9.0 / 30900，固定签名保持不变。",
+    "部署提示：MCP 服务与 server 服务都需要重新部署；手机 App 如需显示新版本号需重新打包安装。"
+  ],
+  "release_notes": [
+    "修复部分 AI 平台连接 MCP 时因 experimental.ovoActivityCards 触发 Invalid input 的兼容问题。",
+    "修复日记批注读取工具返回 noop：server 白名单补齐 read/list/add/mark/delete annotation 相关 action。",
+    "保留上一版媒体状态修复：MediaSession 主动读取媒体播放状态，通知监听作为兜底。",
+    "版本号升级到 v0.3.9.0 / 30900，固定签名保持不变。",
+    "部署提示：MCP 服务与 server 服务都需要重新部署；手机 App 如需显示新版本号需重新打包安装。"
+  ]
+}

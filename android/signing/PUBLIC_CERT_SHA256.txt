@@ -1,0 +1,4 @@
+Public release certificate SHA-256
+AEA75C9B2B5F5C42D56B72D4A69A79A38E1C57F27DB021017BE8656BC8F002FB
+
+This certificate is dedicated to the public edition and is not shared with the private edition.
